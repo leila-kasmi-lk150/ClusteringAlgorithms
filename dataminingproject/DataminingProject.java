@@ -53,10 +53,10 @@ public class DataminingProject extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == CAH) {
             setVisible(false);
-           // new CAH();
            new CAH.CAH();
         } else if (ae.getSource() == Kmeans) {
             setVisible(false);
+            new kmeans.Kmeans();
         }
     }
     

@@ -1,25 +1,21 @@
+package kmeans;
 
-package CAH;
-
-import dataminingproject.CustomButton;
-import dataminingproject.CustomColors;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Vector;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import dataminingproject.CustomButton;
+import dataminingproject.CustomColors;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author Leila
  */
-public class CAH extends JFrame {
-    CustomButton Download, Nouveau, Kmeans;
+public class Kmeans extends JFrame {
+
+    CustomButton Download, Nouveau, cah;
     private JEditorPane editorPane;
-    private JPanel scrollPanel;
-    
-    public CAH() {
+    public Kmeans() {
         getContentPane().setBackground(Color.WHITE);
         setSize(900, 700);
         setLocationRelativeTo(null);
@@ -28,14 +24,13 @@ public class CAH extends JFrame {
         ImageIcon icon = new ImageIcon(getClass().getResource("/img/icon.png"));
         setIconImage(icon.getImage());
         
-        
         // hrader Panel textLabel
         JPanel headerPanel = new JPanel();
         headerPanel.setBackground(CustomColors.LightSalmon);
         headerPanel.setPreferredSize(new Dimension(getWidth(), 80));
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         
-        JLabel textLabel = new JLabel("CAH Algorithme");
+        JLabel textLabel = new JLabel("K-means Algorithme");
         textLabel.setFont(new Font("Canva Sans", Font.BOLD, 25));
         
         headerPanel.add(textLabel);
@@ -46,38 +41,26 @@ public class CAH extends JFrame {
         buttonPanel.setPreferredSize(new Dimension(getWidth(), 80));
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         Nouveau = new CustomButton("Nouveau", 140, 40);
-        //Nouveau.addActionListener(this);
-        Nouveau.addActionListener(new ActionListener() {
+        Nouveau.addActionListener(new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e) {
-                int numberOfClasses = Integer.parseInt(JOptionPane.showInputDialog("Enter number of classes:"));
-
-                // Prompt user to enter values for each class
-                List<Double> classValues = new ArrayList<>();
-                for (int i = 0; i < numberOfClasses; i++) {
-                    double value = Double.parseDouble(JOptionPane.showInputDialog("Enter value for class " + (i + 1) + ":"));
-                    classValues.add(value);
-                }
-
-                // Sort the classValues list
-                Collections.sort(classValues);
-
-                // Pass the sorted data to CAHProject
-                showCAHProject(classValues, numberOfClasses);
+            public void actionPerformed(ActionEvent e){
+                showKmeansProject();
             }
         });
+        
+        
         Download = new CustomButton("Exporter", 140, 40);
         
-        Kmeans = new CustomButton("K-means", 140, 40);
-        Kmeans.addActionListener(new ActionListener(){
+        cah = new CustomButton("CAH", 140, 40);
+        cah.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 setVisible(false);
-                new kmeans.Kmeans();
+                new CAH.CAH();
             }
         });
         
-        buttonPanel.add(Kmeans);
+        buttonPanel.add(cah);
         buttonPanel.add(Nouveau);
         buttonPanel.add(Download);
         
@@ -117,18 +100,16 @@ public class CAH extends JFrame {
 
         setVisible(true);
     }
-    
-   
-   private void showCAHProject(List<Double> classValues, int numberOfClasses) {
+    private void showKmeansProject() {
         
         editorPane.removeAll(); // Remove previous components
-        CAHProject cahProject = new CAHProject(classValues, numberOfClasses);
+        KmeansProject cahProject = new KmeansProject();
         editorPane.setText(cahProject.getScrollPane().toString());
         //scrollPanel.add(cahProject.getScrollPane(), BorderLayout.CENTER);
         editorPane.revalidate(); // Revalidate container panel to reflect changes
         editorPane.repaint(); // Repaint container panel
     }
     public static void main(String[] args) {
-        new CAH();
+        new Kmeans();
     }
 }

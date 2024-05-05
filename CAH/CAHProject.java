@@ -38,15 +38,9 @@ public class CAHProject extends JFrame {
         cahAlgo("Centre de Gravité", classValues, nbrClass);
         
         htmlContent.append("</body></html>");
-        JEditorPane editorPane = new JEditorPane("text/html", htmlContent.toString());
-        editorPane.setEditable(false);
-
-       
-        scrollPane = new JScrollPane(editorPane);
     }
 
     private void cahAlgo(String algo, List<Double> classValues, int nbrClass) {
-        StringBuilder myHtml = new StringBuilder();
         
         classDataList = new ArrayList<>();
          for (double value : classValues) {
