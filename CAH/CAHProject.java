@@ -33,6 +33,10 @@ public class CAHProject extends JFrame {
         
         cahAlgo("Intra Class", classValues, nbrClass);
         
+        // =========================== "Centre de Gravité" ====================================
+        
+        cahAlgo("Centre de Gravité", classValues, nbrClass);
+        
         htmlContent.append("</body></html>");
         JEditorPane editorPane = new JEditorPane("text/html", htmlContent.toString());
         editorPane.setEditable(false);
@@ -73,6 +77,8 @@ public class CAHProject extends JFrame {
                         distance = Math.abs(class1.lv - class2.fv);
                     } else if (algo == "Intra Class") {
                         distance = Math.abs(class1.fv - class2.lv);
+                    } else{
+                        distance = Math.abs((class1.lv / class1.nc)- (class2.lv / class2.nc));
                     }
                     
                     if (distance < minDistance) {
@@ -87,7 +93,12 @@ public class CAHProject extends JFrame {
             ClassData class2 = classDataList.get(minIndex2);
     
             class1.nc += class2.nc;
-            class1.lv = class2.lv;
+            if (algo=="Centre de Gravité") {
+               class1.lv += class2.lv;
+           } else {
+                class1.lv = class2.lv;
+           }
+            
             class1.val += " | " + class2.val;
             classDataList.remove(minIndex2);
             numClass--;
