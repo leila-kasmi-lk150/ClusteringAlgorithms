@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class CAH extends JFrame {
     CustomButton Download, Nouveau, Kmeans;
-    private JTable dataTable;
+    private JEditorPane editorPane;
     private JPanel scrollPanel;
     
     public CAH() {
@@ -85,31 +85,41 @@ public class CAH extends JFrame {
         myButtonPanel.add(linePanel, BorderLayout.CENTER);
         
         
-        // container panel header panel + button panel + scrollPanel 
-        
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+
+        // Create a JEditorPane to render HTML content
+        editorPane = new JEditorPane();
+        editorPane.setContentType("text/html");
+        editorPane.setEditable(false); // To make it read-only
+        editorPane.setPreferredSize(new Dimension(800, 490));
+        scrollPane.setViewportView(editorPane);
+
+        // container panel header panel + button panel + scrollPane
+
         JPanel containerPanel = new JPanel();
-        scrollPanel = new JPanel(new BorderLayout());
         containerPanel.setLayout(new BorderLayout());
         containerPanel.add(headerPanel, BorderLayout.NORTH);
         containerPanel.add(myButtonPanel, BorderLayout.CENTER);
-        containerPanel.add(scrollPanel, BorderLayout.SOUTH);
-         
-        
-        
-        
+        containerPanel.add(scrollPane, BorderLayout.SOUTH);
+
+
         getContentPane().add(containerPanel, BorderLayout.NORTH);
-        
-        
+
+
         setVisible(true);
     }
     
    
    private void showCAHProject(List<Double> classValues, int numberOfClasses) {
-        scrollPanel.removeAll(); // Remove previous components
+        
+        editorPane.removeAll(); // Remove previous components
         CAHProject cahProject = new CAHProject(classValues, numberOfClasses);
-        scrollPanel.add(cahProject.getScrollPane(), BorderLayout.CENTER);
-        scrollPanel.revalidate(); // Revalidate container panel to reflect changes
-        scrollPanel.repaint(); // Repaint container panel
+        editorPane.setText(cahProject.getScrollPane().toString());
+        //scrollPanel.add(cahProject.getScrollPane(), BorderLayout.CENTER);
+        editorPane.revalidate(); // Revalidate container panel to reflect changes
+        editorPane.repaint(); // Repaint container panel
     }
     public static void main(String[] args) {
         new CAH();

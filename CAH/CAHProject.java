@@ -8,6 +8,7 @@ import java.util.List;
 public class CAHProject extends JFrame {
 
     private JScrollPane scrollPane;
+    private StringBuilder htmlContent;
 
     List<ClassData> classDataList;
     public CAHProject(List<Double> classValues, int nbrClass) {
@@ -21,7 +22,7 @@ public class CAHProject extends JFrame {
             classDataList.add(new ClassData(1, value, value, s));
         }
         
-        StringBuilder htmlContent = new StringBuilder();
+        htmlContent = new StringBuilder();
         htmlContent.append("<html><body><h1>Inter Class</h1><table border='1' width='100%'>");
         htmlContent.append("<tr><th colspan='" + nbrClass + "'>Classes</th></tr><tr>");
         
@@ -81,7 +82,8 @@ public class CAHProject extends JFrame {
             classData.updateWithMinimumDistance(classDataList);
         }
     }
-    public JScrollPane getScrollPane() {
-        return scrollPane;
+     
+    public StringBuilder getScrollPane() {
+        return htmlContent;
     }
 }
