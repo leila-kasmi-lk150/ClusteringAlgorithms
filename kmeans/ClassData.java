@@ -6,10 +6,10 @@ package kmeans;
  */
 public class ClassData {
      private String name;
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public ClassData(String name, int x, int y) {
+    public ClassData(String name, double x, double y) {
         this.name = name;
         this.x = x;
         this.y = y;
@@ -24,7 +24,7 @@ public class ClassData {
         this.name = name;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
@@ -32,7 +32,7 @@ public class ClassData {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
@@ -42,6 +42,10 @@ public class ClassData {
 
     @Override
     public String toString() {
-        return "Class Name: " + name + ", X: " + x + ", Y: " + y;
+        return "========================================== \n" +
+                "name='" + name + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                '\n';
     }
 }

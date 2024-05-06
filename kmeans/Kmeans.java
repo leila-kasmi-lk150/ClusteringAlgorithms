@@ -7,6 +7,7 @@ import dataminingproject.CustomColors;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,8 +70,9 @@ public class Kmeans extends JFrame {
                     if (option == JOptionPane.OK_OPTION) {
                         // Store class info in list
                         String name = classNameField.getText();
-                        int x = Integer.parseInt(xValueField.getText());
-                        int y = Integer.parseInt(yValueField.getText());
+                        double x = Double.parseDouble(xValueField.getText());
+                        double y = Double.parseDouble(yValueField.getText());
+
                         classList.add(new ClassData(name, x, y));
                     } else {
                         JOptionPane.showMessageDialog(null, "Cancelled or Closed dialog. Exiting.");
@@ -79,21 +81,13 @@ public class Kmeans extends JFrame {
                 }
                 int numClusters = Integer.parseInt(JOptionPane.showInputDialog("Enter number of clusters:"));
                
-                System.out.println("---------------Class Data:-------------------");
-                for (int i = 0; i < classList.size(); i++) {
-                    System.out.println("class " + (i + 1) + ":");
-                    ClassData classData = classList.get(i);
-                    System.out.println("Name: " + classData.getName() + ", X: " + classData.getX() + ", Y: " + classData.getY());
-                }
                 // Create map to store cluster data
-                ArrayList<ClassData> clusterData = new ArrayList<>();
+                ArrayList<ClusterData> clusterData = new ArrayList<>();
 
                 // Create a new list and copy elements from classList
                 ArrayList<ClassData> myClasses = new ArrayList<>(classList);
 
-                // Select classes for each cluster
                 for (int i = 0; i < numClusters; i++) {
-                    // Create panel for cluster selection
                     JPanel clusterPanel = new JPanel(new GridLayout(2, 1));
                     clusterPanel.add(new JLabel("Select  cluster " + (i + 1) + ":"));
                     JComboBox<String> classComboBox = new JComboBox<>();
@@ -101,38 +95,36 @@ public class Kmeans extends JFrame {
                         classComboBox.addItem(classInfo.getName());
                     }
                     clusterPanel.add(classComboBox);
-
-                    // Show popup with cluster selection
+    
+                    // Show popup
                     int option = JOptionPane.showConfirmDialog(null, clusterPanel, "Select cluster " + (i + 1), JOptionPane.OK_CANCEL_OPTION);
                     if (option == JOptionPane.OK_OPTION) {
-                         // Get selected class from myClasses
-                        ClassData selectedClass = myClasses.get(classComboBox.getSelectedIndex());
-                        selectedClass.setName("Cluster " + (i + 1));
-                        clusterData.add(selectedClass);
-                        // Remove the selected class from myClasses
-                        myClasses.remove(classComboBox.getSelectedIndex());
-                    }else {
+                        // Get selected class 
+                        int selectedIndex = classComboBox.getSelectedIndex();
+                        if (selectedIndex != -1) {
+                            ClassData selectedClass = myClasses.get(selectedIndex);
+                            ArrayList<ClassData> selectedClasses = new ArrayList<>();
+                            selectedClasses.add(selectedClass);
+                            ClusterData cluster = new ClusterData("Cluster " + (i + 1), selectedClasses);
+                            clusterData.add(cluster);
+                            myClasses.remove(selectedIndex);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "No class selected for cluster " + (i + 1) + ". Exiting.");
+                            return;
+                        }
+                    } else {
                         // Handle cancellation or closing of the dialog
                         JOptionPane.showMessageDialog(null, "Cancelled or Closed dialog. Exiting.");
                         return;
                     }
                 }
-                // Show the data stored in clusterData
-                // Show the data stored in clusterData
-                System.out.println("-----------Cluster Data:-------------");
-                for (int i = 0; i < clusterData.size(); i++) {
-                    System.out.println("Cluster " + (i + 1) + ":");
-                    ClassData classData = clusterData.get(i);
-                    System.out.println("Name: " + classData.getName() + ", X: " + classData.getX() + ", Y: " + classData.getY());
-                }
-                System.out.println("-----------------Class Data:");
-                for (int i = 0; i < classList.size(); i++) {
-                    System.out.println("class " + (i + 1) + ":");
-                    ClassData classData = classList.get(i);
-                    System.out.println("Name: " + classData.getName() + ", X: " + classData.getX() + ", Y: " + classData.getY());
-                }
 
-
+                // Print 
+                System.out.println("==================Cluster Data==============");
+                System.out.println(clusterData);
+                System.out.println("================== Classes Data==============");
+                System.out.println(classList);
+                
                 showKmeansProject(classList, numClasses, numClusters, clusterData);
             }
         });
@@ -189,12 +181,11 @@ public class Kmeans extends JFrame {
 
         setVisible(true);
     }
-    private void showKmeansProject(ArrayList<ClassData> classList, int numClasses, int numClusters, ArrayList<ClassData> clusterData) {
+    private void showKmeansProject(ArrayList<ClassData> classList, int numClasses, int numClusters, ArrayList<ClusterData> clusterData) {
         
-        editorPane.removeAll(); // Remove previous components
+        editorPane.removeAll(); 
         KmeansProject cahProject = new KmeansProject(classList,  numClasses,  numClusters, clusterData);
         editorPane.setText(cahProject.getScrollPane().toString());
-        //scrollPanel.add(cahProject.getScrollPane(), BorderLayout.CENTER);
         editorPane.revalidate(); // Revalidate container panel to reflect changes
         editorPane.repaint(); // Repaint container panel
     }
