@@ -1,4 +1,4 @@
-#Clustering Algorithms
+# Clustering Algorithms
 
 This project implements K-means and Hierarchical Clustering Algorithm (HCA) using Java Swing. 
 
