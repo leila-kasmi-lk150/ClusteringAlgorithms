@@ -16,7 +16,15 @@ public class KmeansProject extends JFrame {
         htmlContent = new StringBuilder();
         htmlContent.append("<html><body>");
         
-        htmlContent.append("<h1>Iteration 1</h1>");
+        double IA=0;
+        double IAec;
+        int itr = 1;
+        do { 
+        IAec=IA;
+        IA =0.0;
+        
+        System.out.println(itr);
+        htmlContent.append("<h1>Iteration " + itr+ "</h1>");
         htmlContent.append("<table border='1' width='100%'>");
         htmlContent.append("<tr>"
                 + "<th>Axes</th>" );
@@ -90,7 +98,6 @@ public class KmeansProject extends JFrame {
             htmlContent.append("</tr>");
         }
         htmlContent.append("</table>");
-        System.out.println(clusterData);
         htmlContent.append("");
         for (ClusterData clusterInfo : clusterData) {
             htmlContent.append("<h3>" + clusterInfo.getName()+ " ( " + clusterInfo.getX() + " , "+ clusterInfo.getY() + " )</td>");
@@ -117,7 +124,7 @@ public class KmeansProject extends JFrame {
         }        
         htmlContent.append("</tr>");
         
-        double IA =0.0;
+        
         double I;
         boolean[] classAssignedIA = new boolean[numClasses]; 
         for (int i = 0; i < numClusters; i++) {
@@ -143,6 +150,14 @@ public class KmeansProject extends JFrame {
         }
         htmlContent.append("</table>");
         htmlContent.append("<h3> IA = "+ IA +"</h3>");
+        
+        itr++;
+        System.out.println("IA>=IAec " + (IA>IAec));
+        System.out.println("IA " +IA);
+        System.out.println("IAec " +IAec);
+        System.out.println("====================");
+        } while (IA > IAec);
+        
         
         
         htmlContent.append("</body></html>");
