@@ -34,7 +34,7 @@ public class DataminingProject extends JFrame implements ActionListener{
         buttonPanel.setBackground(Color.WHITE);
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 20));
         
-        CAH = new CustomButton("CAH", 160, 60);
+        CAH = new CustomButton("HCA", 160, 60);
         CAH.addActionListener(this);
         buttonPanel.add(CAH);
         

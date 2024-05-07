@@ -6,10 +6,25 @@ import dataminingproject.CustomButton;
 import dataminingproject.CustomColors;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
+import javax.swing.text.JTextComponent;
+import java.awt.Component;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.FileOutputStream;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Destination;
 
 /**
  *
@@ -19,6 +34,7 @@ public class Kmeans extends JFrame {
 
     CustomButton Download, Nouveau, cah;
     private JEditorPane editorPane;
+    private JScrollPane scrollPane;
     public Kmeans() {
         getContentPane().setBackground(Color.WHITE);
         setSize(900, 700);
@@ -119,11 +135,6 @@ public class Kmeans extends JFrame {
                     }
                 }
 
-                // Print 
-                System.out.println("==================Cluster Data==============");
-                System.out.println(clusterData);
-                System.out.println("================== Classes Data==============");
-                System.out.println(classList);
                 
                 showKmeansProject(classList, numClasses, numClusters, clusterData);
             }
@@ -131,6 +142,12 @@ public class Kmeans extends JFrame {
         
         
         Download = new CustomButton("Exporter", 140, 40);
+        Download.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                download();
+            }
+        });
         
         cah = new CustomButton("CAH", 140, 40);
         cah.addActionListener(new ActionListener(){
@@ -157,7 +174,7 @@ public class Kmeans extends JFrame {
         
         
 
-        JScrollPane scrollPane = new JScrollPane();
+        scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         // Create a JEditorPane to render HTML content
@@ -184,11 +201,55 @@ public class Kmeans extends JFrame {
     private void showKmeansProject(ArrayList<ClassData> classList, int numClasses, int numClusters, ArrayList<ClusterData> clusterData) {
         
         editorPane.removeAll(); 
-        KmeansProject cahProject = new KmeansProject(classList,  numClasses,  numClusters, clusterData);
-        editorPane.setText(cahProject.getScrollPane().toString());
+        KmeansProject kmeansProject = new KmeansProject(classList,  numClasses,  numClusters, clusterData);
+        editorPane.setText(kmeansProject.getScrollPane().toString());
         editorPane.revalidate(); // Revalidate container panel to reflect changes
         editorPane.repaint(); // Repaint container panel
     }
+    
+private void download() {
+    Component view = scrollPane.getViewport().getView();
+
+    if (view instanceof JTextComponent) {
+        
+        
+        JTextComponent textComponent = (JTextComponent) view;
+
+        // Print content to PDF
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setJobName("ScrollPane Content PDF");
+
+        PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
+        File outputFile = new File("scrollpane_content.pdf");
+        attr.add(new Destination(outputFile.toURI()));
+
+        job.setPrintable((graphics, pageFormat, pageIndex) -> {
+            if (pageIndex > 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+
+            graphics.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+            textComponent.printAll(graphics);
+
+            return Printable.PAGE_EXISTS;
+        });
+
+        if (job.printDialog(attr)) {
+            try {
+                job.print(attr);
+                JOptionPane.showMessageDialog(this, "Content downloaded successfully as PDF!");
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error downloading content as PDF!");
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "ScrollPane content type not supported for download!");
+    }
+}
+    
+    
     public static void main(String[] args) {
         new Kmeans();
     }

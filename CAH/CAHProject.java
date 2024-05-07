@@ -47,7 +47,7 @@ public class CAHProject extends JFrame {
             String s = String.valueOf(value);
             classDataList.add(new ClassData(1, value, value, s));
         }
-        htmlContent.append("<h1>" + algo + "</h1><table border='1' width='100%'>");
+        htmlContent.append("<h1 color='#ec5d67'>" + algo + "</h1><table border='1' width='100%'>");
         htmlContent.append("<tr><th colspan='" + nbrClass + "'>Classes</th></tr><tr>");
          
         for (ClassData classData : classDataList) {

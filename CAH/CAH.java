@@ -6,10 +6,18 @@ import dataminingproject.CustomColors;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.io.File;
 import java.util.Vector;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Destination;
+import javax.swing.text.JTextComponent;
 /**
  *
  * @author Leila
@@ -18,7 +26,7 @@ public class CAH extends JFrame {
     CustomButton Download, Nouveau, Kmeans;
     private JEditorPane editorPane;
     private JPanel scrollPanel;
-    
+    private JScrollPane scrollPane;
     public CAH() {
         getContentPane().setBackground(Color.WHITE);
         setSize(900, 700);
@@ -67,6 +75,12 @@ public class CAH extends JFrame {
             }
         });
         Download = new CustomButton("Exporter", 140, 40);
+        Download.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                download();
+            }
+        });
         
         Kmeans = new CustomButton("K-means", 140, 40);
         Kmeans.addActionListener(new ActionListener(){
@@ -93,7 +107,7 @@ public class CAH extends JFrame {
         
         
 
-        JScrollPane scrollPane = new JScrollPane();
+        scrollPane = new JScrollPane();
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         // Create a JEditorPane to render HTML content
@@ -128,6 +142,48 @@ public class CAH extends JFrame {
         editorPane.revalidate(); // Revalidate container panel to reflect changes
         editorPane.repaint(); // Repaint container panel
     }
+   private void download() {
+    Component view = scrollPane.getViewport().getView();
+
+    if (view instanceof JTextComponent) {
+        
+        
+        JTextComponent textComponent = (JTextComponent) view;
+
+        // Print content to PDF
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setJobName("ScrollPane Content PDF");
+
+        PrintRequestAttributeSet attr = new HashPrintRequestAttributeSet();
+        File outputFile = new File("scrollpane_content.pdf");
+        attr.add(new Destination(outputFile.toURI()));
+
+        job.setPrintable((graphics, pageFormat, pageIndex) -> {
+            if (pageIndex > 0) {
+                return Printable.NO_SUCH_PAGE;
+            }
+
+            graphics.translate((int) pageFormat.getImageableX(), (int) pageFormat.getImageableY());
+
+            textComponent.printAll(graphics);
+
+            return Printable.PAGE_EXISTS;
+        });
+
+        if (job.printDialog(attr)) {
+            try {
+                job.print(attr);
+                JOptionPane.showMessageDialog(this, "Content downloaded successfully as PDF!");
+            } catch (PrinterException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Error downloading content as PDF!");
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "ScrollPane content type not supported for download!");
+    }
+}
+    
     public static void main(String[] args) {
         new CAH();
     }

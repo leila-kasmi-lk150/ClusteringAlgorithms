@@ -24,7 +24,7 @@ public class KmeansProject extends JFrame {
         IA =0.0;
         
         System.out.println(itr);
-        htmlContent.append("<h1>Iteration " + itr+ "</h1>");
+        htmlContent.append("<h1 color='#ec5d67'>Iteration " + itr+ "</h1>");
         htmlContent.append("<table border='1' width='100%'>");
         htmlContent.append("<tr>"
                 + "<th>Axes</th>" );
@@ -98,21 +98,24 @@ public class KmeansProject extends JFrame {
             htmlContent.append("</tr>");
         }
         htmlContent.append("</table>");
-        htmlContent.append("");
-        for (ClusterData clusterInfo : clusterData) {
-            htmlContent.append("<h3>" + clusterInfo.getName()+ " ( " + clusterInfo.getX() + " , "+ clusterInfo.getY() + " )</td>");
-        }
+        
         // Print
+        htmlContent.append("<h3 color='F3797F'>Les nouveaux Centres : </h3>");
         for (ClusterData cluster : clusterData) {
-            String leila = cluster.getName() + " : ";
+            String leila = cluster.getName() +  " : ( " + cluster.getX() + " , "+ cluster.getY() + " ==->" ;
             for (ClassData classData : cluster.getClasses()) {
                leila += classData.getName() + " ";
             }
             htmlContent.append("<h4>"+ leila +"</h4>");
         }
         
+        //for (ClusterData clusterInfo : clusterData) {
+          //  htmlContent.append("<h3>" + clusterInfo.getName()+ " : ( " + clusterInfo.getX() + " , "+ clusterInfo.getY() + " )</td>");
+        //}
+        
+        
         // ===== Inertie Intra-Class IA ====
-        htmlContent.append("<h3>Inertie Intra-Class IA</h3>");
+        htmlContent.append("<h3 color='F3797F'>Inertie Intra-Class IA</h3>");
         
         
         htmlContent.append("<table border='1' width='100%'>");
